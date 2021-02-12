@@ -1,0 +1,55 @@
+{
+    "invoice": {
+        "invoiceNumber": "REAK - 2021/02-01",
+        "invoiceDate": "01/02/2021",
+        "dueDate": "07/02/2021",
+        "items": [
+            {
+                "description": "Software Consultancy",
+                "hsn": 998313,
+                "qty": 1,
+                "ratePerItem": 10,
+                "discountPercentage": 5
+            },{
+                "description": "Software Consultancy",
+                "hsn": 998313,
+                "qty": 2,
+                "ratePerItem": 10000,
+                "discountPercentage": 5
+            }
+        ]
+    },
+    "invoiceFrom": {
+        "name": "REAK INFOTECH LLP",
+        "gstNumber": "23AAQFR1394E1Z4",
+        "addressLine1": "91, Nehru Nagar",
+        "addressLine2": "Opp. Medical College",
+        "addressLine3": "Jabalpur, M.P.",
+        "addressLine4": "India, 482003"
+    },
+    "invoiceTo": {
+        "gstNumber": "00AAAAA0000A0A0",
+        "billing": {
+            "name": "Company Name",
+            "addressLine1": "Address Line 1",
+            "addressLine2": "Address Line 2",
+            "addressLine3": "Address Line 3",
+            "addressLine4": "Address Line 4"
+        },
+        "shipping": {
+            "name": "Company Name",
+            "addressLine1": "Address Line 1",
+            "addressLine2": "Address Line 2",
+            "addressLine3": "Address Line 3",
+            "addressLine4": "Address Line 4"
+        }
+    },
+    "settings": {
+        "paymentTerms": "Within 30 Days",
+        "imagePath": "{{./images/}}",
+        "logo": "{logo}",
+        "igstRate": 18,
+        "cgstRate": 9,
+        "sgstRate": 9
+    }
+}

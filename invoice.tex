@@ -1,0 +1,174 @@
+% Using A4 for invoice
+\documentclass[12pt, a4paper]{minimal}
+\usepackage[scale=1,top=1cm, bottom=1cm]{geometry}
+% UTF-8 Support for global character support
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor,colortbl}
+\usepackage{tabularx}
+\usepackage{graphicx}
+% Set Title
+\title{GST Invoice \- REAK INFOTECH LLP}
+\author{REAK INFOTECH LLP}
+\date{14 February 2021}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+
+{{if .Settings.ImagePath}}
+\graphicspath{{.Settings.ImagePath}}
+{{end}}
+
+\newcolumntype{s}{>{\hsize=2.3\hsize}X}
+
+
+% Start Invoice
+\begin{document}
+
+{{if and .Settings.ImagePath .Settings.Logo}}
+\begin{center}
+    \hspace*{4mm} \includegraphics[width=75mm]{{.Settings.Logo}}\\
+\end{center}
+{{end}}
+
+\vspace{5mm}
+
+\begin{center}
+    \begin{tabularx}{0.95\textwidth}{X>{\centering}X>{\raggedleft}X}
+        \rowcolor{LightCyan}
+        Tax Invoice {-} {{.Invoice.InvoiceNumber}} & {{.Invoice.InvoiceDate}} & Rs.
+        {{.Auto.TotalNumeral}}
+    \end{tabularx}
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+    \begin{tabularx}{0.95\textwidth}{Xr}
+        {{.InvoiceFrom.Name}} & {{.InvoiceFrom.AddressLine1}} \\
+        GSTIN {:} {{.InvoiceFrom.GstNumber}} & {{.InvoiceFrom.AddressLine2}} \\
+        & {{.InvoiceFrom.AddressLine3}} \\
+        & {{.InvoiceFrom.AddressLine4}} \\
+    \end{tabularx}
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+    \begin{tabularx}{0.95\textwidth}{Xr}
+        \textbf{Billing Details} & \textbf{Shipping Details} \\
+        {{.InvoiceTo.Billing.Name}} & {{.InvoiceTo.Shipping.Name}} \\
+        {{.InvoiceTo.Billing.AddressLine1}} & {{.InvoiceTo.Shipping.AddressLine1}} \\
+        {{.InvoiceTo.Billing.AddressLine2}} & {{.InvoiceTo.Shipping.AddressLine2}} \\
+        {{.InvoiceTo.Billing.AddressLine3}} & {{.InvoiceTo.Shipping.AddressLine3}} \\
+        {{.InvoiceTo.Billing.AddressLine4}} & {{.InvoiceTo.Shipping.AddressLine4}} \\
+        \textbf{GSTIN {:} {{.InvoiceTo.GstNumber}} } & \textbf{GSTIN {:} {{.InvoiceTo.GstNumber}}
+        }
+    \end{tabularx}
+\end{center}
+
+\vspace{8mm}
+
+\begin{center}
+    \begin{tabularx}{0.60\textwidth}{XXXX}
+        \textbf{Invoice Date} & \textbf{Payment Terms} & \textbf{Due Date} & \textbf{Place of Supply} \\
+        {{.Invoice.InvoiceDate}} & {{.Settings.PaymentTerms}} & {{.Auto.DueDate}} &
+        {{.Auto.StateOfSupply}}
+    \end{tabularx}
+\end{center}
+
+\vspace{10mm}
+
+{{if eq .Auto.GstType "CGST"}}
+\begin{center}
+    \begin{tabularx}{0.95\textwidth}
+        {
+            >{\hsize=0.5\hsize \centering}X % S. No
+            >{\hsize=2\hsize \centering}X % Item Description
+            >{\hsize=0.7\hsize \centering}X % HSN
+            >{\hsize=0.5\hsize \centering}X % Qty
+            >{\hsize=1.2\hsize \centering}X % Rate Per Item
+            >{\hsize=1\hsize \centering}X % Total
+            >{\hsize=0.8\hsize \centering}X % Discount
+            >{\hsize=1.5\hsize \centering}X % Taxable Value
+            >{\hsize=1\hsize}X % Rate CGST
+            >{\hsize=1\hsize}X % Amt CGST
+            >{\hsize=1\hsize}X % Rate SGST
+            >{\hsize=1\hsize}X % Amt SGST
+        }
+        S. No & Item \par Description & HSN & Qty. & Rate Per \par Item & Total & Discount &
+        Taxable \par Value & \multicolumn{2}{>{\hsize=1.5\hsize\centering}X}{CGST} &
+        \multicolumn{2}{>{\hsize=1.5\hsize\centering}X}{SGST} \\
+        &&&&&&&&Rate & Amt. & Rate & Amt. \\
+        {{range $item := .Invoice.Items}}
+            0 &
+            {{.Description}} &
+            {{.Hsn}} &
+            {{.Qty}} &
+            {{.RatePerItem}} &
+            {{.Total}} &
+            {{.DiscountPercentage}}\% &
+            {{.TaxableValue}} &
+            {{$.Settings.CgstRate}}\% &
+            {{.CgstAmount}} &
+            {{$.Settings.SgstRate}}\% &
+            {{.SgstAmount}} \\
+        {{end}}
+    \end{tabularx}
+\end{center}
+{{end}}
+
+{{if eq .Auto.GstType "IGST"}}
+\begin{center}
+    \begin{tabularx}{0.95\textwidth}
+        {
+            >{\hsize=0.5\hsize \centering}X % S. No
+            >{\hsize=2\hsize \centering}X % Item Description
+            >{\hsize=1\hsize \centering}X % HSN
+            >{\hsize=0.5\hsize \centering}X % Qty
+            >{\hsize=1.2\hsize \centering}X % Rate Per Item
+            >{\hsize=1\hsize \centering}X % Total
+            >{\hsize=0.5\hsize \centering}X % Discount
+            >{\hsize=1.3\hsize \centering}X % Taxable Value
+            >{\hsize=1\hsize}X % Rate IGST
+            >{\hsize=1\hsize}X % Amt IGST
+        }
+        S. No & Item \par Description & HSN & Qty. & Rate Per \par Item & Total & Discount &
+        Taxable \par Value & \multicolumn{2}{>{\hsize=1.3\hsize\centering}X}{IGST} \\
+        &&&&&&&&Rate & Amt. \\
+        {{range $item := .Invoice.Items}}
+            0 &
+            {{.Description}} &
+            {{.Hsn}} &
+            {{.Qty}} &
+            {{.RatePerItem}} &
+            {{.Total}} &
+            {{.DiscountPercentage}}\% &
+            {{.TaxableValue}} &
+            {{$.Settings.IgstRate}}\% &
+            {{.IgstAmount}} \\
+        {{end}}
+        \\
+        \\
+        \\
+        \\
+        &&&&Total & Rs. {{.Auto.TotalNumeral}} & {-}
+    \end{tabularx}
+\end{center}
+{{end}}
+
+\vfill
+
+\begin{center}
+    \begin{tabularx}{0.95\textwidth}{Xr}
+        Total Invoice Value (In Figures) & Rs. {{.Auto.TotalNumeral}} \\
+        Total Invoice Value (In Words) & {{.Auto.TotalWords}} \\
+        Amount of Tax Subject to Reverse Charge & Rs. {{.Auto.ChargedGST}} \\
+    \end{tabularx}
+\end{center}
+
+\vspace{10mm}
+
+\begin{flushright}
+    %\includegraphics[width=50mm]{signature} \hspace*{4mm} \\
+    \vspace{15mm}
+    For REAK INFOTECH LLP \hspace*{4mm} \\
+\end{flushright}
+\end{document}
