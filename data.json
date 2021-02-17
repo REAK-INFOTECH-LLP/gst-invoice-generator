@@ -51,5 +51,9 @@
         "igstRate": 18,
         "cgstRate": 9,
         "sgstRate": 9
+    },
+    "auto": {
+        "gstType": "CGST",
+        "stateOfSupply": "Delhi"
     }
 }

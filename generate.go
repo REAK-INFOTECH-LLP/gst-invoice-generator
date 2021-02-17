@@ -8,6 +8,8 @@ import (
     "fmt"
     "strings"
     "math"
+    "regexp"
+    "os/exec"
     "github.com/divan/num2words"
 )
 
@@ -97,9 +99,14 @@ func main(){
     logic(&data)
     
     t, err := template.ParseFiles("invoice.tex")
-    fmt.Println(t, err)
+    //fmt.Println(t, err)
 
-    f, err := os.Create("output/test.tex")
+    var replacer = strings.NewReplacer(" ", "_", "/", "_")
+    rx, _ := regexp.Compile("([0-9/])+")
+    outputFilename := rx.FindString(data.Invoice.InvoiceNumber)
+    outputFilename = replacer.Replace(outputFilename)
+
+    f, err := os.Create("temp/tmp.tex")
     if err != nil {
         fmt.Println("create file: ", err)
         return
@@ -110,11 +117,13 @@ func main(){
         fmt.Print("execute: ", err)
         return
     }
+
+    exec.Command("pdflatex","temp/tmp.tex").Output()
+    exec.Command("mv", "tmp.pdf", "output/"+outputFilename+".pdf").Output()
+    exec.Command("rm", "-rf", "tmp*").Output()
 }
 
 func logic(data *Data) {
-    data.Auto.GstType = "CGST"
-    data.Auto.StateOfSupply = "Delhi"
     calculateLineItem(data)
 }
 
